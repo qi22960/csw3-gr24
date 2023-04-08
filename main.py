@@ -152,6 +152,8 @@ def recursive_solve(grid, n_rows, n_cols):
 			ans = recursive_solve(grid, n_rows, n_cols)
 			#If we've found a solution, return it
 			if ans:
+				# Print the location of empty cell and what number to fill with
+				print(f'Put {i} in location {row+1, col+1}')
 				return ans 
 
 			#If we couldn't find a solution, that must mean this value is incorrect.
