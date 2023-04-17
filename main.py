@@ -10,7 +10,7 @@ grid1 = [
 		[3, 4, 2, 1]]
 
 grid2 = [
-		[1, 0, 4, 2],
+		[1, 3, 4, 2],
 		[4, 2, 1, 3],
 		[2, 1, 0, 4],
 		[3, 4, 2, 1]]
@@ -41,7 +41,18 @@ grid6 = [
 		[0, 0, 1, 0, 0, 0],
 		[0, 5, 0, 0, 6, 4]]
 
-grids = [(grid1, 2, 2), (grid2, 2, 2), (grid3, 2, 2), (grid4, 2, 2), (grid5, 2, 2)]
+grid7 = [
+[0, 2, 0, 0, 0, 0, 0, 1, 0],
+[0, 0, 6, 0, 4, 0, 0, 0, 0],
+[5, 8, 0, 0, 9, 0, 0, 0, 3],
+[0, 0, 0, 0, 0, 3, 0, 0, 4],
+[4, 1, 0, 0, 8, 0, 6, 0, 0],
+[0, 0, 0, 0, 0, 0, 0, 9, 5],
+[2, 0, 0, 0, 1, 0, 0, 8, 0],
+[0, 0, 0, 0, 0, 0, 0, 0, 0],
+[0, 3, 1, 0, 0, 8, 0, 5, 7]]
+
+grids = [(grid1, 2, 2), (grid2, 2, 2), (grid3, 2, 2), (grid4, 2, 2), (grid5, 2, 2), (grid6,2,3), (grid7,3,3)]
 '''
 ===================================
 DO NOT CHANGE CODE ABOVE THIS LINE
@@ -70,11 +81,12 @@ def get_squares(grid, n_rows, n_cols):
 
 	return(squares)
 
+
+
 #To complete the first assignment, please write the code for the following function
 def check_solution(grid, n_rows, n_cols):
 	'''
 	This function is used to check whether a sudoku board has been correctly solved
-
 	args: grid - representation of a suduko board as a nested list.
 	returns: True (correct solution) or False (incorrect solution)
 	'''
@@ -104,7 +116,6 @@ def find_empty(grid):
 	'''
 	This function returns the index (i, j) to the first zero element in a sudoku grid
 	If no such element is found, it returns None
-
 	args: grid
 	return: A tuple (i,j) where i and j are both integers, or None
 	'''
@@ -117,12 +128,41 @@ def find_empty(grid):
 
 	return None
 
+def possible_values(grid,n_rows,n_cols,position):
+	
+	all_rows = []
+	[all_rows.append(i) for i in grid]
+	rowss = all_rows[position[0]]
+
+	column = []
+	for row in grid:
+		column.append(row[position[1]])
+
+	for i in range(n_cols):
+		rows = [i*n_rows, (i+1)*n_rows]
+		for j in range(n_rows):
+			cols = [j*n_cols, (j+1)*n_cols]
+			if rows[0]<=position[0]<rows[1] and cols[0]<=position[1]<cols[1]:
+				square = []
+				for k in range(rows[0],rows[1]):
+					line = grid[k][cols[0]:cols[1]]
+					square +=line
+	
+	not_possible = column + rowss + square
+	
+	possible =[]
+	for i in range(n_cols*n_rows+1):
+		if i not in not_possible:
+			
+			possible.append(i)	
+
+	return possible 
+	
 
 def recursive_solve(grid, n_rows, n_cols):
 	'''
 	This function uses recursion to exhaustively search all possible solutions to a grid
 	until the solution is found
-
 	args: grid, n_rows, n_cols
 	return: A solved grid (as a nested list), or None
 	'''
@@ -131,6 +171,7 @@ def recursive_solve(grid, n_rows, n_cols):
 	n = n_rows*n_cols
 	#Find an empty place in the grid
 	empty = find_empty(grid)
+	
 
 	#If there's no empty places left, check if we've found a solution
 	if not empty:
@@ -142,12 +183,16 @@ def recursive_solve(grid, n_rows, n_cols):
 			return None
 	else:
 		row, col = empty 
+	
+	
 
 	#Loop through possible values
-	for i in range(1, n+1):
+	for i in possible_values(grid,n_rows,n_cols,empty):
 
 			#Place the value into the grid
+			
 			grid[row][col] = i
+			
 			#Recursively solve the grid
 			ans = recursive_solve(grid, n_rows, n_cols)
 			#If we've found a solution, return it
