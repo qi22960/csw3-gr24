@@ -1,6 +1,8 @@
 import random
 import copy
 import time
+import csv
+import numpy as np
 
 #Grids 1-4 are 2x2
 grid1 = [
@@ -40,6 +42,7 @@ grid6 = [
 		[0, 0, 0, 0, 0, 6],
 		[0, 0, 1, 0, 0, 0],
 		[0, 5, 0, 0, 6, 4]]
+
 
 grids = [(grid1, 2, 2), (grid2, 2, 2), (grid3, 2, 2), (grid4, 2, 2), (grid5, 2, 2)]
 '''
@@ -173,6 +176,14 @@ def solve(grid, n_rows, n_cols):
 	
 	#return random_solve(grid, n_rows, n_cols)
 	return recursive_solve(grid, n_rows, n_cols)
+
+def profile(grid, n_rows, n_cols):
+	grid_size = [str(n_rows),"x",str(n_cols)]
+	grid_size = grid_size.split(",")
+
+
+	return grid_size
+print(profile(grid1, 2, 2))
 
 '''
 ===================================
