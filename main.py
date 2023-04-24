@@ -3,6 +3,8 @@ import copy
 import time
 import csv
 import numpy as np
+import copy
+import matplotlib.pyplot as plt
 
 #Grids 1-4 are 2x2
 grid1 = [
@@ -43,10 +45,9 @@ grid6 = [
 		[0, 0, 1, 0, 0, 0],
 		[0, 5, 0, 0, 6, 4]]
 
-<<<<<<< HEAD
 
-grids = [(grid1, 2, 2), (grid2, 2, 2), (grid3, 2, 2), (grid4, 2, 2), (grid5, 2, 2)]
-=======
+#grids = [(grid1, 2, 2), (grid2, 2, 2), (grid3, 2, 2), (grid4, 2, 2), (grid5, 2, 2)]
+
 grid7 = [
 [0, 2, 0, 0, 0, 0, 0, 1, 0],
 [0, 0, 6, 0, 4, 0, 0, 0, 0],
@@ -59,7 +60,7 @@ grid7 = [
 [0, 3, 1, 0, 0, 8, 0, 5, 7]]
 
 grids = [(grid1, 2, 2), (grid2, 2, 2), (grid3, 2, 2), (grid4, 2, 2), (grid5, 2, 2), (grid6,2,3), (grid7,3,3)]
->>>>>>> 50ae2eab33eeb3338df2f7f2fa88d090bc27a4a2
+
 '''
 ===================================
 DO NOT CHANGE CODE ABOVE THIS LINE
@@ -197,9 +198,7 @@ def recursive_solve(grid, n_rows, n_cols):
 	for i in possible_values(grid,n_rows,n_cols,empty):
 
 			#Place the value into the grid
-			
 			grid[row][col] = i
-			
 			#Recursively solve the grid
 			ans = recursive_solve(grid, n_rows, n_cols)
 			#If we've found a solution, return it
@@ -226,22 +225,70 @@ def solve(grid, n_rows, n_cols):
 	#return random_solve(grid, n_rows, n_cols)
 	return recursive_solve(grid, n_rows, n_cols)
 
-'''
-===================================
-DO NOT CHANGE CODE BELOW THIS LINE
-===================================
-'''
-def main():
+def solve_time(grid, n_rows, n_cols):
+	'''
+	This function measure time it takes for a grid to be solved
+	args: grid
+	return: time in second
+	'''
+	start_time = time.time()
+	a = solve(grid, n_rows, n_cols)
+	finish_time = time.time() - start_time
+	return finish_time
 
+
+def count_empty(grid):
+	'''
+	This function return the number of zeros/empty cells in the grid
+	args: grid
+	return: a number of zeros within a grid
+	'''
+	count = 0
+	for i in range(len(grid)):
+		row = grid[i]
+		for j in range(len(row)):
+			if grid[i][j] == 0:
+				count = count + 1
+	return count
+
+
+def variable_name(grid):
+	'''
+	This function return the grid's name rather the grid
+	args: grid
+	return: grid name
+	'''
+	for name, value in globals().items():
+		if id(value) == id(grid):
+			return name
+
+def main():
 	points = 0
+
+	# List of grids detail for bar chart
+	grid_2_2_names = []
+	grid_2_2_size = []
+	grid_2_2_empty = []
+	grid_2_2_time = []
+
+	grid_2_3_names = []
+	grid_2_3_size = []
+	grid_2_3_empty = []
+	grid_2_3_time = []
+
+	grid_3_3_names = []
+	grid_3_3_size = []
+	grid_3_3_empty = []
+	grid_3_3_time = []
 
 	print("Running test script for coursework 1")
 	print("====================================")
-	
+
 	for (i, (grid, n_rows, n_cols)) in enumerate(grids):
 		print("Solving grid: %d" % (i+1))
 		start_time = time.time()
-		solution = solve(grid, n_rows, n_cols)
+		new_grid = copy.deepcopy(grid)
+		solution = solve(new_grid, n_rows, n_cols)
 		elapsed_time = time.time() - start_time
 		print("Solved in: %f seconds" % elapsed_time)
 		print(solution)
@@ -250,9 +297,39 @@ def main():
 			points = points + 10
 		else:
 			print("grid %d incorrect" % (i+1))
+		# Append the name, size, number of empty cells and solve time of grid to list of each grid sizes
+		if n_rows == 2 and n_cols == 2:
+			grid_2_2_names.append(variable_name(grid))
+			grid_2_2_size.append((n_rows,n_cols))
+			grid_2_2_empty.append(count_empty(grid))
+			grid_2_2_time.append(solve_time(grid, n_rows, n_cols))
+		elif n_rows == 2 and n_cols == 3:
+			grid_2_3_names.append(variable_name(grid))
+			grid_2_3_size.append((n_rows, n_cols))
+			grid_2_3_empty.append(count_empty(grid))
+			grid_2_3_time.append(solve_time(grid, n_rows, n_cols))
+		elif n_rows == 3 and n_cols == 3:
+			grid_3_3_names.append(variable_name(grid))
+			grid_3_3_size.append((n_rows, n_cols))
+			grid_3_3_empty.append(count_empty(grid))
+			grid_3_3_time.append(solve_time(grid, n_rows, n_cols))
 
 	print("====================================")
 	print("Test script complete, Total points: %d" % points)
+
+	# Creating figure and axis objects
+	fig, ax = plt.subplots()
+	# Setting the width of each bars
+	bar_width = 2
+	# Plotting bars for each grid size. Time in y-axis and number of empty cells in x-axis
+	ax.bar([h-bar_width/3 for h in grid_2_2_empty], grid_2_2_time, width=bar_width, label="Grids (2*2)")
+	ax.bar([h-bar_width/3 for h in grid_2_3_empty], grid_2_3_time, width=bar_width, label="Grids (2*3)")
+	ax.bar([h-bar_width/3 for h in grid_3_3_empty], grid_3_3_time, width=bar_width, label="Grids (3*3)")
+	# Axis labels and legend
+	ax.set_xlabel('Number of empty cells')
+	ax.set_ylabel('Solving time (second)')
+	ax.legend()
+	plt.show()
 
 
 if __name__ == "__main__":
