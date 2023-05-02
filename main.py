@@ -90,32 +90,46 @@ def find_empty(grid):
 
 
 def possible_values(grid, n_rows, n_cols, position):
+    '''
+    This function finds the possible values that could fill a given empty position and returns these possible values. 
+    
+    args: 
+    grid - nested list 
+    n_rows - int 
+    n_cols - int 
+    position - function (find_empty(grid))
+    
+    returns: 
+    possible - list
+
+    '''
     all_rows = []
     [all_rows.append(i) for i in grid]
-    rowss = all_rows[position[0]]
+    rowss = all_rows[position[0]] # List of all values in row of empty position 
 
-    column = []
+    column = [] # List of all values in column of empty position 
     for row in grid:
         column.append(row[position[1]])
 
-    for i in range(n_cols):
+    for i in range(n_cols): 
         rows = [i * n_rows, (i + 1) * n_rows]
         for j in range(n_rows):
             cols = [j * n_cols, (j + 1) * n_cols]
-            if rows[0] <= position[0] < rows[1] and cols[0] <= position[1] < cols[1]:
-                square = []
+            if rows[0] <= position[0] < rows[1] and cols[0] <= position[1] < cols[1]: # True when the empty position is in the square
+                square = [] # list of values in square of empty position 
                 for k in range(rows[0], rows[1]):
                     line = grid[k][cols[0]:cols[1]]
                     square += line
 
-    not_possible = column + rowss + square
+    not_possible = column + rowss + square  # Creates a list of all values in the row, column and square. 
+    # These values cannot be the value of empty position 
 
-    possible = []
+    possible = [] # List of possible values of the empty position 
     for i in range(n_cols * n_rows + 1):
-        if i not in not_possible:
+        if i not in not_possible: # Only adds values which are not in list 'not_possible' to the list 'possible'
             possible.append(i)
 
-    return possible
+    return possible # Returns the list 'possible'
 
 all_hints = []
 
