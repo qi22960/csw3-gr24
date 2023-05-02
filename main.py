@@ -1,75 +1,25 @@
 import random
-import copy
 import time
 import csv
 import numpy as np
 import copy
 import matplotlib.pyplot as plt
-
-grid1 = [
-		[1, 0, 4, 2],
-		[4, 2, 1, 3],
-		[2, 1, 3, 4],
-		[3, 4, 2, 1]]
-
-grid2 = [
-		[1, 3, 4, 2],
-		[4, 2, 1, 3],
-		[2, 1, 0, 4],
-		[3, 4, 2, 1]]
-
-grid3 = [
-		[1, 0, 4, 2],
-		[4, 2, 1, 0],
-		[2, 1, 0, 4],
-		[0, 4, 2, 1]]
-
-grid4 = [
-		[1, 0, 4, 2],
-		[0, 2, 1, 0],
-		[2, 1, 0, 4],
-		[0, 4, 2, 1]]
-
-grid5 = [
-		[1, 0, 0, 2],
-		[0, 0, 1, 0],
-		[0, 1, 0, 4],
-		[0, 0, 0, 1]]
-
-grid6 = [
-		[0, 0, 6, 0, 0, 3],
-		[5, 0, 0, 0, 0, 0],
-		[0, 1, 3, 4, 0, 0],
-		[0, 0, 0, 0, 0, 6],
-		[0, 0, 1, 0, 0, 0],
-		[0, 5, 0, 0, 6, 4]]
+from Function_1_2_3  import show_hints
+from Function_1_2_3  import read_file
+from Function_1_2_3 import safe_file
+from Function_1_2_3 import show_all_hints
 
 
-grid7 = [
-[8, 0, 9, 0, 2, 0, 3, 0, 0],
-[0, 3, 7, 0, 6, 0, 5, 0, 0],
-[0, 0, 0, 4, 0, 9, 7, 0, 0],
-[0, 0, 2, 9, 0, 1, 0, 6, 0],
-[1, 0, 0, 3, 0, 6, 0, 0, 0],
-[0, 0, 0, 0, 0, 0, 1, 0, 3],
-[7, 0, 0, 0, 0, 0, 0, 0, 8],
-[5, 0, 0, 0, 0, 0, 0, 1, 4],
-[0, 0, 0, 2, 8, 4, 6, 0, 5]]
+grid1 = read_file('easy1.txt') #grid easy1
+grid2 = read_file('easy2.txt') #grid easy1
+grid3 = read_file('easy3.txt') #grid easy1
+grid4 = read_file('med1.txt') #grid easy1
+grid5 = read_file('med2.txt') #grid easy1
+grid6 = read_file('hard1.txt') #grid easy1
+
+grids = [(grid1, 3, 3), (grid2, 3, 3), (grid3, 2, 3), (grid4, 3, 3), (grid5, 3, 3), (grid6, 3, 3)]
 
 
-grid8 = [
-[0, 2, 0, 0, 0, 0, 0, 1, 0],
-[0, 0, 6, 0, 4, 0, 0, 0, 0],
-[5, 8, 0, 0, 9, 0, 0, 0, 3],
-[0, 0, 0, 0, 0, 3, 0, 0, 4],
-[4, 1, 0, 0, 8, 0, 6, 0, 0],
-[0, 0, 0, 0, 0, 0, 0, 9, 5],
-[2, 0, 0, 0, 1, 0, 0, 8, 0],
-[0, 0, 0, 0, 0, 0, 0, 0, 0],
-[0, 3, 1, 0, 0, 8, 0, 5, 7]]
-
-
-grids = [(grid1, 2, 2), (grid2, 2, 2), (grid3, 2, 2), (grid4, 2, 2), (grid5, 2, 2), (grid6,2,3), (grid7,3,3), (grid8, 3, 3)]
 
 
 def check_section(section, n):
@@ -167,6 +117,7 @@ def possible_values(grid, n_rows, n_cols, position):
 
     return possible
 
+all_hints = []
 
 def recursive_solve(grid, n_rows, n_cols):
     '''
@@ -201,8 +152,7 @@ def recursive_solve(grid, n_rows, n_cols):
         ans = recursive_solve(grid, n_rows, n_cols)
         # If we've found a solution, return it
         if ans:
-            # Print the location of empty cell and what number to fill with
-            print(f'Put {i} in location {row + 1, col + 1}')
+            all_hints.append([i,row+1,col+1])
             return ans
 
         # If we couldn't find a solution, that must mean this value is incorrect.
@@ -265,6 +215,10 @@ def variable_name(grid):
             return name
 
 
+def hits(hint_number):
+    show_hints(all_hints, hint_number)
+    return 0
+
 def main():
     points = 0
 
@@ -289,12 +243,15 @@ def main():
 
     for (i, (grid, n_rows, n_cols)) in enumerate(grids):
         print("Solving grid: %d" % (i + 1))
-        start_time = time.time()
         new_grid = copy.deepcopy(grid)
+        start_time = time.time()
         solution = solve(new_grid, n_rows, n_cols)
         elapsed_time = time.time() - start_time
-        print("Solved in: %f seconds" % elapsed_time)
+        print("Solved in: %.15f seconds" % elapsed_time)
         print(solution)
+        safe_file("%d" % (i+1),solution) #task 2
+        all_hints.append(['+++++++'])
+        print('----------------')
         if check_solution(solution, n_rows, n_cols):
             print("grid %d correct" % (i + 1))
             points = points + 10
@@ -324,7 +281,7 @@ def main():
     # Creating figure and axis objects
     fig, ax = plt.subplots()
     # Setting the width of each bars
-    bar_width = 2
+    bar_width = 1
     # Plotting bars for each grid size. Time in y-axis and number of empty cells in x-axis
     ax.bar([h - bar_width / 3 for h in grid_2_2_empty], grid_2_2_time, width=bar_width, label="Grids (2x2)")
     ax.bar([h - bar_width / 3 for h in grid_2_3_empty], grid_2_3_time, width=bar_width, label="Grids (2x3)")
@@ -334,6 +291,10 @@ def main():
     ax.set_ylabel('Solving time (second)')
     ax.legend()
     plt.show()
+
+    hits(2)  # task 3
+    # print('all_hints',all_hints)
+    show_all_hints()  # as files #task 1
 
 
 if __name__ == "__main__":
