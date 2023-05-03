@@ -31,7 +31,7 @@ grids = [
     (grid1, 2, 2), (grid2, 2, 2), (grid3, 2, 2), (grid4, 2, 2), (grid5, 2, 2),
     (grid6, 2, 3), (grid7, 2, 3), (grid8, 2, 3), (grid9, 2, 3),
     (grid10, 3, 3), (grid11, 3, 3), (grid12, 3, 3), (grid13, 3, 3), (grid14, 3, 3), (grid15, 3, 3)
-]
+    ]
 
 
 def check_section(section, n):
@@ -316,7 +316,47 @@ def main():
     print("====================================")
     print("Test script complete, Total points: %d" % points)
 
-    #using flags:
+    # Creating figure and axis objects
+    fig, ax = plt.subplots()
+    # Setting the width of each bars
+    bar_width = 1
+    # Plotting bars for each grid size. Time in y-axis and number of empty cells in x-axis
+    ax.bar([h - bar_width / 3 for h in grid_2_2_empty], grid_2_2_time, width=bar_width, label="Grids (2x2)")
+    ax.bar([h - bar_width / 3 for h in grid_2_3_empty], grid_2_3_time, width=bar_width, label="Grids (2x3)")
+    ax.bar([h - bar_width / 3 for h in grid_3_3_empty], grid_3_3_time, width=bar_width, label="Grids (3x3)")
+    # Title of the bar chart
+    plt.title("Solve time vs Number of empty cells of all grids")
+    # Axis labels and legend
+    ax.set_xlabel('Number of empty cells')
+    ax.set_ylabel('Solving time (second)')
+    ax.legend()
+    plt.show()
+    plt.clf()
+
+    # Bar chart of 2x2 grids
+    plt.bar(grid_2_2_empty, grid_2_2_time, color=['blue'], width=0.5)
+    plt.xlabel("Number of Empty cells")
+    plt.ylabel("Solve time (s)")
+    plt.title("2x2 Solve time vs Number of empty cells")
+    plt.show()
+    plt.clf()
+
+    # Bar chart of 2x3 grids
+    plt.bar(grid_2_3_empty, grid_2_3_time, color=['orange'], width=0.5)
+    plt.xlabel("Number of Empty cells")
+    plt.ylabel("Solve time (s)")
+    plt.title("2x3 Solve time vs Number of empty cells")
+    plt.show()
+    plt.clf()
+
+    # Bar chart of 3x3 grids
+    plt.bar(grid_3_3_empty, grid_3_3_time, color=['green'], width=0.5)
+    plt.xlabel("Number of Empty cells")
+    plt.ylabel("Solve time (s)")
+    plt.title("3x3 Solve time vs Number of empty cells")
+    plt.show()
+
+    # using flags:
     user_typing = 0
     while user_typing != 'quit':
         
