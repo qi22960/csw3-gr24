@@ -136,6 +136,7 @@ def possible_values(grid, n_rows, n_cols, position):
     # These values cannot be the value of empty position 
 
     possible = [] # List of possible values of the empty position 
+   
     for i in range(n_cols * n_rows + 1):
         if i not in not_possible: # Only adds values which are not in list 'not_possible' to the list 'possible'
             possible.append(i)
@@ -158,6 +159,7 @@ def recursive_solve(grid, n_rows, n_cols):
     n = n_rows * n_cols
     # Find an empty place in the grid
     empty = find_empty(grid)
+    
 
     # If there's no empty places left, check if we've found a solution
     if not empty:
@@ -189,6 +191,17 @@ def recursive_solve(grid, n_rows, n_cols):
     # If we get here, we've tried all possible values. Return none to indicate the previous value is incorrect.
     return None
 
+def wavefront_solve(grid,n_rows,n_cols):
+    position = []
+    for i in range(len(grid)):
+        row = grid[i]
+        for j in range(len(row)):
+            if grid[i][j] == 0:
+                possible = possible_values(grid, n_rows, n_cols,(i,j))
+                grid[i][j]= possible
+
+
+#wavefront_solve(grid12,3,3)
 
 def solve(grid, n_rows, n_cols):
     '''
@@ -196,7 +209,7 @@ def solve(grid, n_rows, n_cols):
 	Comment out one of the lines below to either use the random or recursive solver
 	'''
 
-    # return random_solve(grid, n_rows, n_cols)
+    #return wavefront_solve(grid, n_rows, n_cols)
     return recursive_solve(grid, n_rows, n_cols)
 
 
