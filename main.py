@@ -30,7 +30,7 @@ grids = [
     (grid1, 2, 2), (grid2, 2, 2), (grid3, 2, 2), (grid4, 2, 2), (grid5, 2, 2),
     (grid6, 2, 3), (grid7, 2, 3), (grid8, 2, 3), (grid9, 2, 3),
     (grid10, 3, 3), (grid11, 3, 3), (grid12, 3, 3), (grid13, 3, 3), (grid14, 3, 3), (grid15, 3, 3)
-]
+    ]
 
 
 def check_section(section, n):
