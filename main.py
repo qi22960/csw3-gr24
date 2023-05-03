@@ -102,41 +102,41 @@ def find_empty(grid):
 
 def possible_values(grid, n_rows, n_cols, position):
     '''
-    This function finds the possible values that could fill a given empty position and returns these possible values. 
-    
-    args: 
-    grid - nested list 
-    n_rows - int 
-    n_cols - int 
+    This function finds the possible values that could fill a given empty position and returns these possible values.
+
+    args:
+    grid - nested list
+    n_rows - int
+    n_cols - int
     position - function (find_empty(grid))
-    
-    returns: 
+
+    returns:
     possible - list
 
     '''
     all_rows = []
     [all_rows.append(i) for i in grid]
-    rowss = all_rows[position[0]] # List of all values in row of empty position 
+    rowss = all_rows[position[0]] # List of all values in row of empty position
 
-    column = [] # List of all values in column of empty position 
+    column = [] # List of all values in column of empty position
     for row in grid:
         column.append(row[position[1]])
 
-    for i in range(n_cols): 
+    for i in range(n_cols):
         rows = [i * n_rows, (i + 1) * n_rows]
         for j in range(n_rows):
             cols = [j * n_cols, (j + 1) * n_cols]
             if rows[0] <= position[0] < rows[1] and cols[0] <= position[1] < cols[1]: # True when the empty position is in the square
-                square = [] # list of values in square of empty position 
+                square = [] # list of values in square of empty position
                 for k in range(rows[0], rows[1]):
                     line = grid[k][cols[0]:cols[1]]
                     square += line
 
-    not_possible = column + rowss + square  # Creates a list of all values in the row, column and square. 
-    # These values cannot be the value of empty position 
+    not_possible = column + rowss + square  # Creates a list of all values in the row, column and square.
+    # These values cannot be the value of empty position
 
-    possible = [] # List of possible values of the empty position 
-   
+    possible = [] # List of possible values of the empty position
+
     for i in range(n_cols * n_rows + 1):
         if i not in not_possible: # Only adds values which are not in list 'not_possible' to the list 'possible'
             possible.append(i)
@@ -159,7 +159,7 @@ def recursive_solve(grid, n_rows, n_cols):
     n = n_rows * n_cols
     # Find an empty place in the grid
     empty = find_empty(grid)
-    
+
 
     # If there's no empty places left, check if we've found a solution
     if not empty:
@@ -204,25 +204,42 @@ def wavefront_solve(grid,n_rows,n_cols):
 #wavefront_solve(grid12,3,3)
 
 def solve(grid, n_rows, n_cols):
-    '''
-	Solve function for Sudoku coursework.
-	Comment out one of the lines below to either use the random or recursive solver
-	'''
-
+    """
+    Solve function for Sudoku coursework.
+    Comment out one of the lines below to either use the random or recursive solver
+    """
     #return wavefront_solve(grid, n_rows, n_cols)
     return recursive_solve(grid, n_rows, n_cols)
 
 
 def solve_time_average(grid, n_rows, n_cols):
     """
-    This function measure time it takes for a grid to be solved for 10 times and calculate the average time
-	args: grid
-	return: average time in second
+    This function measure time it takes for a grid to be solved using recursive solver and calculate the average 10 tries
+    args: grid
+    return: average time in second
     """
     solve_times = []
+    grid_copy = copy.deepcopy(grid)
+    for a in range(10):
+        start_time = time.time()
+        solve(grid_copy, n_rows, n_cols)
+        finish_time = time.time()
+        solve_times.append(finish_time - start_time)
+        average_time = sum(solve_times) / len(solve_times)
+    return round(average_time, 10)
+
+
+def solve_time_average_wavefront(grid, n_rows, n_cols):
+    """
+    This function measure time it takes for a grid to be solved using wavefront solver and calculate the average 10 tries
+    args: grid
+    return: average time in second
+    """
+    solve_times = []
+    grid_copy = copy.deepcopy(grid)
     for a in range(5):
         start_time = time.time()
-        solve(grid, n_rows, n_cols)
+        wavefront_solve(grid_copy, n_rows, n_cols)
         finish_time = time.time()
         solve_times.append(finish_time - start_time)
         average_time = sum(solve_times) / len(solve_times)
@@ -232,8 +249,8 @@ def solve_time_average(grid, n_rows, n_cols):
 def count_empty(grid):
     """
     This function return the number of zeros/empty cells in the grid
-	args: grid
-	return: a number of zeros within a grid
+    args: grid
+    return: a number of zeros within a grid
     """
     count = 0
     for i in range(len(grid)):
@@ -269,20 +286,20 @@ def main():
     points = 0
 
     # List of grids detail for bar chart
-    grid_2_2_names = []
     grid_2_2_size = []
     grid_2_2_empty = []
-    grid_2_2_time = []
+    recursive_grid_2_2_time = []
+    wavefront_grid_2_2_time = []
 
-    grid_2_3_names = []
     grid_2_3_size = []
     grid_2_3_empty = []
-    grid_2_3_time = []
+    recursive_grid_2_3_time = []
+    wavefront_grid_2_3_time = []
 
-    grid_3_3_names = []
     grid_3_3_size = []
     grid_3_3_empty = []
-    grid_3_3_time = []
+    recursive_grid_3_3_time = []
+    wavefront_grid_3_3_time = []
 
     print("Running test script for coursework 1")
     print("====================================")
@@ -311,20 +328,22 @@ def main():
 
         # Append the name, size, number of empty cells and solve time of grid to list of each grid sizes
         if n_rows == 2 and n_cols == 2:
-            grid_2_2_names.append(variable_name(grid))
             grid_2_2_size.append((n_rows, n_cols))
             grid_2_2_empty.append(count_empty(grid))
-            grid_2_2_time.append(solve_time_average(grid, n_rows, n_cols))
+            recursive_grid_2_2_time.append(solve_time_average(grid, n_rows, n_cols))
+            wavefront_grid_2_2_time.append(solve_time_average_wavefront(grid, n_rows, n_cols))
         elif n_rows == 2 and n_cols == 3:
-            grid_2_3_names.append(variable_name(grid))
             grid_2_3_size.append((n_rows, n_cols))
             grid_2_3_empty.append(count_empty(grid))
-            grid_2_3_time.append(solve_time_average(grid, n_rows, n_cols))
+            recursive_grid_2_3_time.append(solve_time_average(grid, n_rows, n_cols))
+            wavefront_grid_2_3_time.append(solve_time_average_wavefront(grid, n_rows, n_cols))
         elif n_rows == 3 and n_cols == 3:
-            grid_3_3_names.append(variable_name(grid))
             grid_3_3_size.append((n_rows, n_cols))
             grid_3_3_empty.append(count_empty(grid))
-            grid_3_3_time.append(solve_time_average(grid, n_rows, n_cols))
+            recursive_grid_3_3_time.append(solve_time_average(grid, n_rows, n_cols))
+            wavefront_grid_3_3_time.append(solve_time_average_wavefront(grid, n_rows, n_cols))
+
+
 
     print("====================================")
     print("Test script complete, Total points: %d" % points)
@@ -334,11 +353,25 @@ def main():
     # Setting the width of each bars
     bar_width = 1
     # Plotting bars for each grid size. Time in y-axis and number of empty cells in x-axis
-    ax.bar([h - bar_width / 3 for h in grid_2_2_empty], grid_2_2_time, width=bar_width, label="Grids (2x2)")
-    ax.bar([h - bar_width / 3 for h in grid_2_3_empty], grid_2_3_time, width=bar_width, label="Grids (2x3)")
-    ax.bar([h - bar_width / 3 for h in grid_3_3_empty], grid_3_3_time, width=bar_width, label="Grids (3x3)")
+    ax.bar([h - bar_width / 3 for h in grid_2_2_empty], recursive_grid_2_2_time, width=bar_width, label="Grids (2x2)")
+    ax.bar([h - bar_width / 3 for h in grid_2_3_empty], recursive_grid_2_3_time, width=bar_width, label="Grids (2x3)")
+    ax.bar([h - bar_width / 3 for h in grid_3_3_empty], recursive_grid_3_3_time, width=bar_width, label="Grids (3x3)")
     # Title of the bar chart
-    plt.title("Solve time vs Number of empty cells of all grids")
+    plt.title("Solution time of all grids by recursive solver")
+    # Axis labels and legend
+    ax.set_xlabel('Number of empty cells')
+    ax.set_ylabel('Solving time (second)')
+    ax.legend()
+
+    # Creating figure and axis objects
+    fig, ax = plt.subplots()
+    bar_width = 1
+    # Plotting bars for each grid size. Time in y-axis and number of empty cells in x-axis
+    ax.bar([h - bar_width / 3 for h in grid_2_2_empty], wavefront_grid_2_2_time, width=bar_width, label="Grids (2x2)")
+    ax.bar([h - bar_width / 3 for h in grid_2_3_empty], wavefront_grid_2_3_time, width=bar_width, label="Grids (2x3)")
+    ax.bar([h - bar_width / 3 for h in grid_3_3_empty], wavefront_grid_3_3_time, width=bar_width, label="Grids (3x3)")
+    # Title of the bar chart
+    plt.title("Solution time of all grids by wavefront solver")
     # Axis labels and legend
     ax.set_xlabel('Number of empty cells')
     ax.set_ylabel('Solving time (second)')
@@ -347,65 +380,65 @@ def main():
     plt.clf()
 
     # Bar chart of 2x2 grids
-    plt.bar(grid_2_2_empty, grid_2_2_time, color=['blue'], width=0.5)
+    plt.bar(grid_2_2_empty, recursive_grid_2_2_time, color=['blue'], width=0.5)
     plt.xlabel("Number of Empty cells")
     plt.ylabel("Solve time (s)")
-    plt.title("2x2 Solve time vs Number of empty cells")
+    plt.title("2x2 solution time")
     plt.show()
     plt.clf()
 
     # Bar chart of 2x3 grids
-    plt.bar(grid_2_3_empty, grid_2_3_time, color=['orange'], width=0.5)
+    plt.bar(grid_2_3_empty, recursive_grid_2_3_time, color=['orange'], width=0.5)
     plt.xlabel("Number of Empty cells")
     plt.ylabel("Solve time (s)")
-    plt.title("2x3 Solve time vs Number of empty cells")
+    plt.title("2x3 solution time")
     plt.show()
     plt.clf()
 
     # Bar chart of 3x3 grids
-    plt.bar(grid_3_3_empty, grid_3_3_time, color=['green'], width=0.5)
+    plt.bar(grid_3_3_empty, recursive_grid_3_3_time, color=['green'], width=0.5)
     plt.xlabel("Number of Empty cells")
     plt.ylabel("Solve time (s)")
-    plt.title("3x3 Solve time vs Number of empty cells")
+    plt.title("3x3 solution time")
     plt.show()
 
     # using flags:
     user_typing = 0
     while user_typing != 'quit':
-        
+
         user_typing =input("\nYou can use flags  \nusing 'All hints' to show all hints, \nusing 'hints(number)' to show hints of the amount you need and the original grid with hints. Example: type 'hints(3)' to show 3 hints. \nusing 'plot' to show the solving time, \nusing 'store solution' to store the solution in text seperately,\nor type 'quit' to end\n-")
         #decide flag 'hints(number)' been used
         #take the number from input
         try:
-            
+
             number_for_hints = int(user_typing.split("(")[1].split(")")[0])
             print(number_for_hints)
-            hints(number_for_hints) 
+            hints(number_for_hints)
             print("\nNumbers of hints has been show")
-            
+
         except:
         #decide flag 'All hints' or 'plot' been used
             if user_typing == 'All hints':
-                
+
                 hints(0)  # task 3
                 print_all_hints() # as files #task 1
-                
+
             elif user_typing == 'plot':
-                
-                #show the graph 
-                plot(grid_2_2_empty,grid_2_2_time,grid_2_3_empty,grid_2_3_time,grid_3_3_empty,grid_3_3_time)
+
+                #show the graph
+                plt.plot(grid_2_2_empty,recursive_grid_2_2_time,grid_2_3_empty,recursive_grid_2_3_time,grid_3_3_empty,recursive_grid_3_3_time)
                 print("\nGraphs have been print")
-                
+
             elif user_typing == 'store solution':
-                
+
                 hints(0)
                 store_all_hints()
                 print("\nThe text of hints has been store")
-                
+
             elif user_typing == 'quit':
-                
+
                 print("\nend")
-                
+
             else:
                 print("\nInput error, please try again")
 
