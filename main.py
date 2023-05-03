@@ -237,7 +237,7 @@ def solve_time_average_wavefront(grid, n_rows, n_cols):
     """
     solve_times = []
     grid_copy = copy.deepcopy(grid)
-    for a in range(5):
+    for a in range(10):
         start_time = time.time()
         wavefront_solve(grid_copy, n_rows, n_cols)
         finish_time = time.time()
@@ -282,51 +282,33 @@ def hints(hint_number):
     return 0
 
 
-def main():
-    points = 0
-
-    # List of grids detail for bar chart
+def profile():
+    """
+    This function collect information about grids such as size, number of empty cells
+    and solution time of both recursive and wavefront solver
+    Then it saves them in lists
+    Then plot them in bar charts
+    """
+    # details of 2x2 grids
     grid_2_2_size = []
     grid_2_2_empty = []
     recursive_grid_2_2_time = []
     wavefront_grid_2_2_time = []
 
+    # details of 2x3 grids
     grid_2_3_size = []
     grid_2_3_empty = []
     recursive_grid_2_3_time = []
     wavefront_grid_2_3_time = []
 
+    # details of 3x3 grids
     grid_3_3_size = []
     grid_3_3_empty = []
     recursive_grid_3_3_time = []
     wavefront_grid_3_3_time = []
 
-    print("Running test script for coursework 1")
-    print("====================================")
-
+    # Append the name, size, number of empty cells and solve time of grid to list of each grid sizes
     for (i, (grid, n_rows, n_cols)) in enumerate(grids):
-        print("Solving grid: %d" % (i + 1))
-        new_grid = copy.deepcopy(grid)   # Make a copy of grids and solve them
-        solve_times = []
-        # Calculate the average solve time of 10 tries
-        for a in range(10):
-            start_time = time.time()
-            solution = solve(new_grid, n_rows, n_cols)
-            finish_time = time.time()
-            solve_times.append(finish_time - start_time)
-            average_time = sum(solve_times) / len(solve_times)
-        print("Solved in: %.15f seconds" % average_time)
-        print(solution)
-        safe_file("%d" % (i + 1), solution)  # task 2
-        all_hints.append(['+++++++'])
-        print('----------------')
-        if check_solution(solution, n_rows, n_cols):
-            print("grid %d correct" % (i + 1))
-            points = points + 10
-        else:
-            print("grid %d incorrect" % (i + 1))
-
-        # Append the name, size, number of empty cells and solve time of grid to list of each grid sizes
         if n_rows == 2 and n_cols == 2:
             grid_2_2_size.append((n_rows, n_cols))
             grid_2_2_empty.append(count_empty(grid))
@@ -342,11 +324,6 @@ def main():
             grid_3_3_empty.append(count_empty(grid))
             recursive_grid_3_3_time.append(solve_time_average(grid, n_rows, n_cols))
             wavefront_grid_3_3_time.append(solve_time_average_wavefront(grid, n_rows, n_cols))
-
-
-
-    print("====================================")
-    print("Test script complete, Total points: %d" % points)
 
     # Creating figure and axis objects
     fig, ax = plt.subplots()
@@ -402,11 +379,44 @@ def main():
     plt.title("3x3 solution time")
     plt.show()
 
-    # using flags:
+
+def main():
+    points = 0
+    print("Running test script for coursework 1")
+    print("====================================")
+
+    for (i, (grid, n_rows, n_cols)) in enumerate(grids):
+        print("Solving grid: %d" % (i + 1))
+        new_grid = copy.deepcopy(grid)   # Make a copy of grids and solve them
+        solve_times = []
+        # Calculate the average solve time of 10 tries
+        for a in range(10):
+            start_time = time.time()
+            solution = solve(new_grid, n_rows, n_cols)
+            finish_time = time.time()
+            solve_times.append(finish_time - start_time)
+            average_time = sum(solve_times) / len(solve_times)
+        print("Solved in: %.15f seconds" % average_time)
+        print(solution)
+        safe_file("%d" % (i + 1), solution)  # task 2
+        all_hints.append(['+++++++'])
+        print('----------------')
+        if check_solution(solution, n_rows, n_cols):
+            print("grid %d correct" % (i + 1))
+            points = points + 10
+        else:
+            print("grid %d incorrect" % (i + 1))
+
+    print("====================================")
+    print("Test script complete, Total points: %d" % points)
+
+    profile()
+
+    # using flags
     user_typing = 0
     while user_typing != 'quit':
 
-        user_typing =input("\nYou can use flags  \nusing 'All hints' to show all hints, \nusing 'hints(number)' to show hints of the amount you need and the original grid with hints. Example: type 'hints(3)' to show 3 hints. \nusing 'plot' to show the solving time, \nusing 'store solution' to store the solution in text seperately,\nor type 'quit' to end\n-")
+        user_typing =input("\nYou can use flags  \nusing 'All hints' to show all hints, \nusing 'hints(number)' to show hints of the amount you need and the original grid with hints. Example: type 'hints(3)' to show 3 hints. \nusing 'plot' to show the solving time graphs, \nusing 'store solution' to store the solution in text seperately,\nor type 'quit' to end\n-")
         #decide flag 'hints(number)' been used
         #take the number from input
         try:
@@ -426,7 +436,7 @@ def main():
             elif user_typing == 'plot':
 
                 #show the graph
-                plt.plot(grid_2_2_empty,recursive_grid_2_2_time,grid_2_3_empty,recursive_grid_2_3_time,grid_3_3_empty,recursive_grid_3_3_time)
+                profile()
                 print("\nGraphs have been print")
 
             elif user_typing == 'store solution':
