@@ -6,7 +6,9 @@ from Function_1_2_3 import show_hints
 from Function_1_2_3 import read_file
 from Function_1_2_3 import safe_file
 from Function_1_2_3 import store_all_hints
+#================================================================================
 from Function_1_2_3 import print_all_hints
+#==================================================================================
 
 # 2x2 grids
 grid1 = read_file('2x2_2.txt')
@@ -237,6 +239,7 @@ def hints(hint_number):
     show_hints(all_hints, hint_number)
     return 0
 
+#=======================================================================================================================================================================================================================    
 def plot(grid_2_2_empty,grid_2_2_time,grid_2_3_empty,grid_2_3_time,grid_3_3_empty,grid_3_3_time):
     
     # Creating figure and axis objects
@@ -278,6 +281,7 @@ def plot(grid_2_2_empty,grid_2_2_time,grid_2_3_empty,grid_2_3_time,grid_3_3_empt
     plt.ylabel("Solve time (s)")
     plt.title("3x3 Solve time vs Number of empty cells")
     plt.show()
+#=======================================================================================================================================================================================================================    
 
 def main():
     points = 0
@@ -343,6 +347,7 @@ def main():
     print("====================================")
     print("Test script complete, Total points: %d" % points)
     
+#===================================================================================================================================================================
     #using flags:
     user_typing = 0
     while user_typing != 'quit':
@@ -382,6 +387,7 @@ def main():
                 
             else:
                 print("\nInput error, please try again")
+#=======================================================================================================================================================================================================================    
 
 if __name__ == "__main__":
     main()
