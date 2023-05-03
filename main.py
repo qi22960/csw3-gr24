@@ -5,7 +5,8 @@ import matplotlib.pyplot as plt
 from Function_1_2_3 import show_hints
 from Function_1_2_3 import read_file
 from Function_1_2_3 import safe_file
-from Function_1_2_3 import show_all_hints
+from Function_1_2_3 import store_all_hints
+from Function_1_2_3 import print_all_hints
 
 # 2x2 grids
 grid1 = read_file('2x2_2.txt')
@@ -301,48 +302,45 @@ def main():
     print("====================================")
     print("Test script complete, Total points: %d" % points)
 
-    # Creating figure and axis objects
-    fig, ax = plt.subplots()
-    # Setting the width of each bars
-    bar_width = 1
-    # Plotting bars for each grid size. Time in y-axis and number of empty cells in x-axis
-    ax.bar([h - bar_width / 3 for h in grid_2_2_empty], grid_2_2_time, width=bar_width, label="Grids (2x2)")
-    ax.bar([h - bar_width / 3 for h in grid_2_3_empty], grid_2_3_time, width=bar_width, label="Grids (2x3)")
-    ax.bar([h - bar_width / 3 for h in grid_3_3_empty], grid_3_3_time, width=bar_width, label="Grids (3x3)")
-    # Title of the bar chart
-    plt.title("Solve time vs Number of empty cells of all grids")
-    # Axis labels and legend
-    ax.set_xlabel('Number of empty cells')
-    ax.set_ylabel('Solving time (second)')
-    ax.legend()
-    plt.show()
-    plt.clf()
-
-    # Bar chart of 2x2 grids
-    plt.bar(grid_2_2_empty, grid_2_2_time, color=['blue'], width=0.5)
-    plt.xlabel("Number of Empty cells")
-    plt.ylabel("Solve time (s)")
-    plt.title("2x2 Solve time vs Number of empty cells")
-    plt.show()
-    plt.clf()
-
-    # Bar chart of 2x3 grids
-    plt.bar(grid_2_3_empty, grid_2_3_time, color=['orange'], width=0.5)
-    plt.xlabel("Number of Empty cells")
-    plt.ylabel("Solve time (s)")
-    plt.title("2x3 Solve time vs Number of empty cells")
-    plt.show()
-    plt.clf()
-
-    # Bar chart of 3x3 grids
-    plt.bar(grid_3_3_empty, grid_3_3_time, color=['green'], width=0.5)
-    plt.xlabel("Number of Empty cells")
-    plt.ylabel("Solve time (s)")
-    plt.title("3x3 Solve time vs Number of empty cells")
-    plt.show()
-
-    hints(3)  # task 3
-    show_all_hints()  # as files #task 1
+    #using flags:
+    user_typing = 0
+    while user_typing != 'quit':
+        
+        user_typing =input("\nYou can use flags  \nusing 'All hints' to show all hints, \nusing 'hints(number)' to show hints of the amount you need and the original grid with hints. Example: type 'hints(3)' to show 3 hints. \nusing 'plot' to show the solving time, \nusing 'store solution' to store the solution in text seperately,\nor type 'quit' to end\n-")
+        #decide flag 'hints(number)' been used
+        #take the number from input
+        try:
+            
+            number_for_hints = int(user_typing.split("(")[1].split(")")[0])
+            print(number_for_hints)
+            hints(number_for_hints) 
+            print("\nNumbers of hints has been show")
+            
+        except:
+        #decide flag 'All hints' or 'plot' been used
+            if user_typing == 'All hints':
+                
+                hints(0)  # task 3
+                print_all_hints() # as files #task 1
+                
+            elif user_typing == 'plot':
+                
+                #show the graph 
+                plot(grid_2_2_empty,grid_2_2_time,grid_2_3_empty,grid_2_3_time,grid_3_3_empty,grid_3_3_time)
+                print("\nGraphs have been print")
+                
+            elif user_typing == 'store solution':
+                
+                hints(0)
+                store_all_hints()
+                print("\nThe text of hints has been store")
+                
+            elif user_typing == 'quit':
+                
+                print("\nend")
+                
+            else:
+                print("\nInput error, please try again")
 
 
 if __name__ == "__main__":
