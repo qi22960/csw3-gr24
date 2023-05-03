@@ -5,8 +5,8 @@ import matplotlib.pyplot as plt
 from Function_1_2_3 import show_hints
 from Function_1_2_3 import read_file
 from Function_1_2_3 import safe_file
-from Function_1_2_3 import store_all_hints
 #================================================================================
+from Function_1_2_3 import store_all_hints
 from Function_1_2_3 import print_all_hints
 #==================================================================================
 
