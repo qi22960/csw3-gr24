@@ -410,8 +410,6 @@ def main():
     print("====================================")
     print("Test script complete, Total points: %d" % points)
 
-    profile()
-
     # using flags
     user_typing = 0
     while user_typing != 'quit':
