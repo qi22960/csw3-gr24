@@ -355,15 +355,20 @@ def profile():
     plt.show()
 
 def Wavefront_slove(grids):
-    
+    '''
+    This function is used to use wavefrount slover in Task 3 to sloved the grids
+    '''
     #print(grids_for_Wavefront_slove)
     #print(len(grids_for_Wavefront_slove))
     for grid_number in range(len(grids_for_Wavefront_slove)):
         print('=======================================')
         print('Wavefront_slove solution for grid',grid_number+1,':\n')
+	#set grids need to be sloved
         grid_need_to_slove = grids_for_Wavefront_slove[grid_number][0]
+	#set details of grids
         range_sudoku_ = grids_for_Wavefront_slove[grid_number][1]
         Length_empty_grid_ = grids_for_Wavefront_slove[grid_number][2]
+	#using wavefront to slove suduku
         using_Wavefront(range_sudoku_,Length_empty_grid_,grid_need_to_slove)
     
 
