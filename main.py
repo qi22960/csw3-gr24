@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+import argparse
 import time
 import copy
 import matplotlib.pyplot as plt
@@ -8,7 +9,6 @@ from Function_1_2_3 import safe_file
 from Function_1_2_3 import store_all_hints
 from Function_1_2_3 import print_all_hints
 from Task_3 import using_Wavefront
-import copy
 
 # 2x2 grids
 grid1 = read_file('2x2_2.txt')
@@ -394,44 +394,68 @@ def main():
     #using Wavefront to slove all grids
     Wavefront_slove(grids_for_Wavefront_slove)
     # using flags
-    user_typing = 0
-    while user_typing != 'quit':
+    parser = argparse.ArgumentParser(description="Solve Sudoku")
+    parser.add_argument("-explain", action="store_true", help="Show each step of the solving process")
+    parser.add_argument("-hint", nargs="?", const=True, type=int, help="Show a specific hint by number")
+    parser.add_argument("-profile", action="store_true", help="Show each step of the solving process")
+    parser.add_argument('-file', nargs=2, help='input and output file paths')
 
-        user_typing =input("\nYou can use flags  \nusing 'All hints' to show all hints, \nusing 'hints(number)' to show hints of the amount you need and the original grid with hints. Example: type 'hints(3)' to show 3 hints. \nusing 'plot' to show the solving time graphs, \nusing 'store solution' to store the solution in text seperately,\nor type 'quit' to end\n-")
-        # decide flag 'hints(number)' been used
-        # take the number from input
-        try:
+    args = parser.parse_args()
 
-            number_for_hints = int(user_typing.split("(")[1].split(")")[0])
-            print(number_for_hints)
-            hints(number_for_hints)
-            print("\nNumbers of hints has been show")
 
-        except:
-            # decide flag 'All hints' or 'plot' been used
-            if user_typing == 'All hints':
+    if args.explain == True:
+        print('Show all hints1')
+        hints(0)  # task 3
+        print_all_hints() # as files #task 1
+    else:
+        print('Dont Show all hints')
+        
+    if args.hint is not None:
+        if args.hint is True:
+            number = True
+            print('Show all hints')
+            hints(0)  # task 3
+            print_all_hints() # as files #task 1
+        else:
+            number = args.hint
+            hints(number)
+            print(number)
+            
+    if args.profile == True:
+        print('show graphs')
+        profile()
+        
+    else:
+        print('Dont show graphs')
 
-                hints(0)  # task 3
-                print_all_hints() # as files #task 1
+    if args.file:
+        input_file_name, output_file_name = args.file
+        print("Input file nmae:", input_file_name)
+        #get grid which need to be slove
+        gride_to_slove_ = read_file(input_file_name)
+        #ger detials of grid
+        if len(gride_to_slove_) > 6:
+            row = 3
+            column = 3
+        elif len(gride_to_slove_) == 6:
+            row = 2
+            column = 3
+        else:
+            row = 2
+            column = 2
+        #get sloved grid
+        solved_grid = using_Wavefront(row,column,gride_to_slove_)
+        
+        
+        print("Output file name:", output_file_name)
 
-            elif user_typing == 'plot':
-
-                # show the graph
-                profile()
-                print("\nGraphs have been print")
-
-            elif user_typing == 'store solution':
-
-                hints(0)
-                store_all_hints()
-                print("\nThe text of hints has been store")
-
-            elif user_typing == 'quit':
-
-                print("\nend")
-
-            else:
-                print("\nInput error, please try again")
+        #print(type(output_file_path))
+        #safe sloved grad
+        safe_file(output_file_name,solved_grid)
+        
+        if args.explain == True:
+            hints(0)
+            store_all_hints(output_file_name)
 
 
 if __name__ == "__main__":
