@@ -279,7 +279,7 @@ def profile():
     recursive_grid_3_3_time = []
     wavefront_grid_3_3_time = []
 
-    # Append the name, size, number of empty cells and solve time of grid to list of each grid sizes
+    # Append the grid size, number of empty cells and solve times of grid to lists of each grid sizes
     for (i, (grid, n_rows, n_cols)) in enumerate(grids):
         if n_rows == 2 and n_cols == 2:
             grid_2_2_size.append((n_rows, n_cols))
