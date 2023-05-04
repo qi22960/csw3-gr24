@@ -3,6 +3,7 @@ import argparse
 import time
 import copy
 import matplotlib.pyplot as plt
+from itertools import cycle
 from Function_1_2_3 import show_hints
 from Function_1_2_3 import read_file
 from Function_1_2_3 import safe_file
@@ -277,71 +278,80 @@ def profile():
             grid_2_2_size.append((n_rows, n_cols))
             grid_2_2_empty.append(count_empty(grid))
             recursive_grid_2_2_time.append(average_solve_time(grid, n_rows, n_cols, recursive_solve))
-            wavefront_grid_2_2_time.append(average_solve_time(grid, n_rows, n_cols, wavefront_solve))
+            wavefront_grid_2_2_time.append(average_solve_time(n_rows, n_cols, grid,  using_Wavefront))
         elif n_rows == 2 and n_cols == 3:
             grid_2_3_size.append((n_rows, n_cols))
             grid_2_3_empty.append(count_empty(grid))
             recursive_grid_2_3_time.append(average_solve_time(grid, n_rows, n_cols, recursive_solve))
-            wavefront_grid_2_3_time.append(average_solve_time(grid, n_rows, n_cols, wavefront_solve))
+            wavefront_grid_2_3_time.append(average_solve_time(n_rows, n_cols, grid,  using_Wavefront))
         elif n_rows == 3 and n_cols == 3:
             grid_3_3_size.append((n_rows, n_cols))
             grid_3_3_empty.append(count_empty(grid))
             recursive_grid_3_3_time.append(average_solve_time(grid, n_rows, n_cols, recursive_solve))
-            wavefront_grid_3_3_time.append(average_solve_time(grid, n_rows, n_cols, wavefront_solve))
+            wavefront_grid_3_3_time.append(average_solve_time(n_rows, n_cols, grid,  using_Wavefront))
 
-    # Creating figure and axis objects
+    patterns = cycle(['/', '\\', '-', '+', 'x', 'o', 'O', '.', '*'])
+    # Graph of 2x2 solution time vs number of unfilled cells
+    x = range(len(grid_2_2_empty))
+    width = 0.2
     fig, ax = plt.subplots()
-    # Setting the width of each bars
-    bar_width = 1
-    # Plotting bars for each grid size. Time in y-axis and number of empty cells in x-axis
-    ax.bar([h - bar_width / 3 for h in grid_2_2_empty], recursive_grid_2_2_time, width=bar_width, label="Grids (2x2)")
-    ax.bar([h - bar_width / 3 for h in grid_2_3_empty], recursive_grid_2_3_time, width=bar_width, label="Grids (2x3)")
-    ax.bar([h - bar_width / 3 for h in grid_3_3_empty], recursive_grid_3_3_time, width=bar_width, label="Grids (3x3)")
-    # Title of the bar chart
-    plt.title("Solution time of all grids by recursive solver")
-    # Axis labels and legend
-    ax.set_xlabel('Number of empty cells')
+    data1 = ax.bar(x, recursive_grid_2_2_time, width, label='Recursive 2x2')
+    data2 = ax.bar([i + width for i in x], wavefront_grid_2_2_time, width, label='Wavefront 2x2')
+
+    # Add pattern for overlapping bars
+    for a, b in zip(data1, data2):
+        if a.get_height() == b.get_height():
+            b.set_hatch(next(patterns))
+
+    # Customize plot
+    ax.set_xticks([i + width / 2 for i in x])
+    ax.set_xticklabels(grid_2_2_empty)
     ax.set_ylabel('Solving time (second)')
+    ax.set_xlabel('Number of empty cells')
+    ax.set_title('Solution time of 2x2 grids')
     ax.legend()
 
-    # Creating figure and axis objects
+    # Graph of 2x3 solution time vs number of unfilled cells
+    x = range(len(grid_2_3_empty))
+    width = 0.2
     fig, ax = plt.subplots()
-    bar_width = 1
-    # Plotting bars for each grid size. Time in y-axis and number of empty cells in x-axis
-    ax.bar([h - bar_width / 3 for h in grid_2_2_empty], wavefront_grid_2_2_time, width=bar_width, label="Grids (2x2)")
-    ax.bar([h - bar_width / 3 for h in grid_2_3_empty], wavefront_grid_2_3_time, width=bar_width, label="Grids (2x3)")
-    ax.bar([h - bar_width / 3 for h in grid_3_3_empty], wavefront_grid_3_3_time, width=bar_width, label="Grids (3x3)")
-    # Title of the bar chart
-    plt.title("Solution time of all grids by wavefront solver")
-    # Axis labels and legend
-    ax.set_xlabel('Number of empty cells')
+    data1 = ax.bar(x, recursive_grid_2_3_time, width, label='Recursive 2x3')
+    data2 = ax.bar([i + width for i in x], wavefront_grid_2_3_time, width, label='Wavefront 2x3')
+
+    # Add pattern for overlapping bars
+    for a, b in zip(data1, data2):
+        if a.get_height() == b.get_height():
+            b.set_hatch(next(patterns))
+
+    # Customize plot
+    ax.set_xticks([i + width / 2 for i in x])
+    ax.set_xticklabels(grid_2_3_empty)
     ax.set_ylabel('Solving time (second)')
+    ax.set_xlabel('Number of empty cells')
+    ax.set_title('Solution time of 2x3 grids')
+    ax.legend()
+
+    # Graph of 2x2 solution time vs number of unfilled cells
+    x = range(len(grid_3_3_empty))
+    width = 0.2
+    fig, ax = plt.subplots()
+    data1 = ax.bar(x, recursive_grid_3_3_time, width, label='Recursive 3x3')
+    data2 = ax.bar([i + width for i in x], wavefront_grid_3_3_time, width, label='Wavefront 3x3')
+
+    # Add pattern for overlapping bars
+    for a, b in zip(data1, data2):
+        if a.get_height() == b.get_height():
+            b.set_hatch(next(patterns))
+
+    # Customize plot
+    ax.set_xticks([i + width / 2 for i in x])
+    ax.set_xticklabels(grid_3_3_empty)
+    ax.set_ylabel('Solving time (second)')
+    ax.set_xlabel('Number of empty cells')
+    ax.set_title('Solution time of 3x3 grids')
     ax.legend()
     plt.show()
-    plt.clf()
 
-    # Bar chart of 2x2 grids
-    plt.bar(grid_2_2_empty, recursive_grid_2_2_time, color=['blue'], width=0.5)
-    plt.xlabel("Number of Empty cells")
-    plt.ylabel("Solve time (s)")
-    plt.title("2x2 solution time")
-    plt.show()
-    plt.clf()
-
-    # Bar chart of 2x3 grids
-    plt.bar(grid_2_3_empty, recursive_grid_2_3_time, color=['orange'], width=0.5)
-    plt.xlabel("Number of Empty cells")
-    plt.ylabel("Solve time (s)")
-    plt.title("2x3 solution time")
-    plt.show()
-    plt.clf()
-
-    # Bar chart of 3x3 grids
-    plt.bar(grid_3_3_empty, recursive_grid_3_3_time, color=['green'], width=0.5)
-    plt.xlabel("Number of Empty cells")
-    plt.ylabel("Solve time (s)")
-    plt.title("3x3 solution time")
-    plt.show()
 
 def Wavefront_slove(grids):
     '''
@@ -360,7 +370,7 @@ def Wavefront_slove(grids):
 	#using wavefront to slove suduku
         grid_been_sloved = using_Wavefront(range_sudoku_,Length_empty_grid_,grid_need_to_slove)
         print(grid_been_sloved)
-    
+
 
 def main():
     points = 0
@@ -390,7 +400,8 @@ def main():
 
     print("====================================")
     print("Test script complete, Total points: %d" % points)
-    
+    profile()
+
     #using Wavefront to slove all grids
     Wavefront_slove(grids_for_Wavefront_slove)
     # using flags
@@ -409,7 +420,7 @@ def main():
         print_all_hints() # as files #task 1
     else:
         print('Dont Show all hints')
-        
+
     if args.hint is not None:
         if args.hint is True:
             number = True
@@ -420,11 +431,11 @@ def main():
             number = args.hint
             hints(number)
             print(number)
-            
+
     if args.profile == True:
         print('show graphs')
         profile()
-        
+
     else:
         print('Dont show graphs')
 
@@ -445,14 +456,14 @@ def main():
             column = 2
         #get sloved grid
         solved_grid = using_Wavefront(row,column,gride_to_slove_)
-        
-        
+
+
         print("Output file name:", output_file_name)
 
         #print(type(output_file_path))
         #safe sloved grad
         safe_file(output_file_name,solved_grid)
-        
+
         if args.explain == True:
             hints(0)
             store_all_hints(output_file_name)
