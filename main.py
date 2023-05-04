@@ -84,12 +84,12 @@ def check_solution(grid, n_rows, n_cols):
 
 
 def find_empty(grid):
-    '''
-	This function returns the index (i, j) to the first zero element in a sudoku grid
-	If no such element is found, it returns None
-	args: grid
-	return: A tuple (i,j) where i and j are both integers, or None
-	'''
+    """
+    This function returns the index (i, j) to the first zero element in a sudoku grid
+    If no such element is found, it returns None
+    args: grid
+    return: A tuple (i,j) where i and j are both integers, or None
+    """
 
     for i in range(len(grid)):
         row = grid[i]
@@ -222,7 +222,7 @@ def solve_time_average(grid, n_rows, n_cols):
     grid_copy = copy.deepcopy(grid)
     for a in range(10):
         start_time = time.time()
-        solve(grid_copy, n_rows, n_cols)
+        recursive_solve(grid_copy, n_rows, n_cols)
         finish_time = time.time()
         solve_times.append(finish_time - start_time)
         average_time = sum(solve_times) / len(solve_times)
@@ -415,8 +415,8 @@ def main():
     while user_typing != 'quit':
 
         user_typing =input("\nYou can use flags  \nusing 'All hints' to show all hints, \nusing 'hints(number)' to show hints of the amount you need and the original grid with hints. Example: type 'hints(3)' to show 3 hints. \nusing 'plot' to show the solving time graphs, \nusing 'store solution' to store the solution in text seperately,\nor type 'quit' to end\n-")
-        #decide flag 'hints(number)' been used
-        #take the number from input
+        # decide flag 'hints(number)' been used
+        # take the number from input
         try:
 
             number_for_hints = int(user_typing.split("(")[1].split(")")[0])
@@ -425,7 +425,7 @@ def main():
             print("\nNumbers of hints has been show")
 
         except:
-        #decide flag 'All hints' or 'plot' been used
+            # decide flag 'All hints' or 'plot' been used
             if user_typing == 'All hints':
 
                 hints(0)  # task 3
@@ -433,7 +433,7 @@ def main():
 
             elif user_typing == 'plot':
 
-                #show the graph
+                # show the graph
                 profile()
                 print("\nGraphs have been print")
 
