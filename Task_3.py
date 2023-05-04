@@ -1,11 +1,10 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-Created on Thu May  4 12:17:39 2023
+Created on Thu May  4 10:09:30 2023
 
 @author: czm
 """
-
 
 from Function_1_2_3  import read_file
 width_empty_grid = 0
@@ -70,97 +69,71 @@ def get_related_indices(r, c):
                 
     return related_indices
 
-
+def solve_sudoku(grid, possibilities):
     
-def solve_sudoku(grid, possibles):
-    '''
-    find the least number of possibles and solved the suduku start from it
-    '''
     #set global value
     global width_empty_grid
     global Length_empty_grid
     global range_sudoku 
-       
-    # Find the first empty cell with the min possible values.
-    min_possibles_values = float('inf')
-    next_row, next_column = None, None
-    for row in range(range_sudoku):
-           
-        for column in range(range_sudoku):
-            
-            if grid[row][column] == 0 and len(possibles[row][column]) < min_possibles_values:
-                
-                min_possibles_values = len(possibles[row][column])
-                next_row, next_column = row, column
+    
+    #backtrack
+    def backtrack(row, column):
+        if row == range_sudoku:
+            return grid
 
-    # find whether grid have been sloved
-    if next_row is None and next_column is None:
+        next_row = row if column < range_sudoku-1 else row + 1
+        next_column = (column + 1) % range_sudoku
+
+        if grid[row][column] != 0:
+            return backtrack(next_row, next_column)
+
+        for value in possibilities[row][column]:
+            if valid(row, column, value):
+                grid[row][column] = value
+                result = backtrack(next_row, next_column)
+                if result is not None:
+                    return result
+                grid[row][column] = 0
+
+        return None
+    
+    #test valid
+    def valid(row, column, value):
+        
+        #set global value
+        global width_empty_grid
+        global Length_empty_grid
+        global range_sudoku 
+        
+        for number_ in range(range_sudoku):
+            if grid[row][number_] == value or grid[number_][column] == value:
+                return False
+        square_row = (row // width_empty_grid) * width_empty_grid
+        square_column = (column // Length_empty_grid) * Length_empty_grid
+        for row_ in range(square_row, square_row + width_empty_grid):
+            for columm_ in range(square_column, square_column + Length_empty_grid):
+                if grid[row_][columm_] == value:
+                    return False
         return True
 
-    # Fit each possible value for the current cell.
-    for value in possibles[next_row][next_column]:
-           
-        # Check if the value is valid in the current cell.
-        if valid(grid, next_row, next_column, value):
-               
-            # Make the tentative assignment and recurse.
-            grid[next_row][next_column] = value
-            if solve_sudoku(grid, possibles):
-                   
-                return True
-               
-            #Undo the assignment.
-            grid[next_row][next_column] = 0
-
-    #backtrack.
-    return False
-    
-#test valid
-def valid(grid, row, column, value):
-    
-    """
-    check whether the value is valid (follow the sudoku rows)
-    """
-    
-    #set global value
-    global width_empty_grid
-    global Length_empty_grid
-    global range_sudoku 
-    
-    # Check row.
-    if value in grid[row]:
-        return False
-    
-    # Check column.
-    if value in [grid[number_][column] for number_ in range(range_sudoku)]:
-        return False
-    
-    # Check subgrid.
-    subgrid_row = (row // width_empty_grid) * width_empty_grid
-    subgrid_col = (column // Length_empty_grid) * Length_empty_grid
-    for number_r in range(subgrid_row, subgrid_row + width_empty_grid):
-        
-        for number_c in range(subgrid_col, subgrid_col + width_empty_grid):
-            
-            if grid[number_r][number_c] == value:
-                return False
-    
-    return True
+    return backtrack(0, 0)
 
 def using_Wavefront(width_empty_grid_,Length_empty_grid_,grid_need_to_slove):
     
-   #set global value
+    #set global value
     global width_empty_grid
     global Length_empty_grid
     global range_sudoku
-    #set details of grids
+    
     width_empty_grid = width_empty_grid_
     Length_empty_grid = Length_empty_grid_
     range_sudoku = width_empty_grid * Length_empty_grid
-    #get possible value
+    
+  
     possible_values_for_grid = create_possible_values_grid(grid_need_to_slove)
-    #solve sudoku
+    
     solution = solve_sudoku(grid_need_to_slove, possible_values_for_grid)
+    
     
     return solution
 
@@ -183,18 +156,18 @@ def main1():
     
     #get the sudoku
     grid_need_to_slove = read_file(file_name)
-    #print('\nThe empty grid:\n',grid_need_to_slove)
+    print(grid_need_to_slove)
     
     #find possible value
     possible_values_for_grid = create_possible_values_grid(grid_need_to_slove)
-    print("\nAll possible value:\n",possible_values_for_grid)
+    print("\nAll possible value")
+    print(possible_values_for_grid)
     
     #find solution
-    solve_sudoku(grid_need_to_slove, possible_values_for_grid)
-    solution = grid_need_to_slove
+    solution = solve_sudoku(grid_need_to_slove, possible_values_for_grid)
     
     #print solution
-    print('\nsolution:\n',solution)
+    print('\nsolution\n',solution)
     
 if __name__ == "__main__":
     main1()
