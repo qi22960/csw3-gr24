@@ -149,31 +149,20 @@ def valid(grid, row, column, value):
 
 def using_Wavefront(width_empty_grid_,Length_empty_grid_,grid_need_to_slove):
     
-    #set global value
+   #set global value
     global width_empty_grid
     global Length_empty_grid
     global range_sudoku
-    
+    #set details of grids
     width_empty_grid = width_empty_grid_
     Length_empty_grid = Length_empty_grid_
     range_sudoku = width_empty_grid * Length_empty_grid
-    
-    #print(width_empty_grid)
-    #print(Length_empty_grid)
-    #print(range_sudoku)
-    print("grid_need_to_slove:")
-    print(grid_need_to_slove)
-    
-    #find possible value
+    #get possible value
     possible_values_for_grid = create_possible_values_grid(grid_need_to_slove)
-    print("\nAll possible value:")
-    print(possible_values_for_grid)
-    
-    #find solution
+    #solve sudoku
     solution = solve_sudoku(grid_need_to_slove, possible_values_for_grid)
     
-    #print solution
-    print('\nsolution:\n',solution,'\n')
+    return solution
 
 def main1():
     
