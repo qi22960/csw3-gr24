@@ -350,7 +350,7 @@ def Wavefront_slove(grids):
     #print(grids_for_Wavefront_slove)
     #print(len(grids_for_Wavefront_slove))
     for grid_number in range(len(grids_for_Wavefront_slove)):
-        print('=======================================')
+        print('\n=======================================')
         print('Wavefront_slove solution for grid',grid_number+1,':\n')
 	#set grids need to be sloved
         grid_need_to_slove = grids_for_Wavefront_slove[grid_number][0]
@@ -358,7 +358,8 @@ def Wavefront_slove(grids):
         range_sudoku_ = grids_for_Wavefront_slove[grid_number][1]
         Length_empty_grid_ = grids_for_Wavefront_slove[grid_number][2]
 	#using wavefront to slove suduku
-        using_Wavefront(range_sudoku_,Length_empty_grid_,grid_need_to_slove)
+        grid_been_sloved = using_Wavefront(range_sudoku_,Length_empty_grid_,grid_need_to_slove)
+        print(grid_been_sloved)
     
 
 def main():
