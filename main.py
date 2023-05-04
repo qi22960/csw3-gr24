@@ -395,10 +395,10 @@ def main():
     Wavefront_slove(grids_for_Wavefront_slove)
     # using flags
     parser = argparse.ArgumentParser(description="Solve Sudoku")
-    parser.add_argument("-explain", action="store_true", help="Show each step of the solving process")
-    parser.add_argument("-hint", nargs="?", const=True, type=int, help="Show a specific hint by number")
-    parser.add_argument("-profile", action="store_true", help="Show each step of the solving process")
-    parser.add_argument('-file', nargs=2, help='input and output file paths')
+    parser.add_argument("-explain", action="store_true", help="Show all the steps of the solving process")
+    parser.add_argument("-hint", nargs="?", const=True, type=int, help="Show some specific hints by number")
+    parser.add_argument("-profile", action="store_true", help="Show the plot of time")
+    parser.add_argument('-file', nargs=2, help='input and output file paths,Example if you want read hard1 and safe it in solution for hard1 ,please use --file hard1.txt solution_for_hard1.txt')
 
     args = parser.parse_args()
 
