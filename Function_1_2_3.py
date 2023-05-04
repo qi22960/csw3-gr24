@@ -36,7 +36,6 @@ def safe_file(name,suduku):
     This function safe each socution saperately as a txt, file
     '''
     #chage the final number with number and discription
-    name = 'grid ' + name + ' solution in square.txt'
     
     with open(name, 'w') as output_file:
         # Write the original lines to the output file
@@ -132,6 +131,9 @@ def store_all_hints(name):
     #find solution for each gieds in the list we have processed
     for each_grids in range(len(all_list_sep)):
         
+        #file_name = f"Solution in text {each_grids+1}.txt" 
+    
+        
         #store the selution in text
         with open(name, 'a+') as file:
             
@@ -161,3 +163,21 @@ def print_all_hints():
             print(f'hints number: {hits_number_for_print}')
             hits_number_for_print += 1
             print(f'Put {item[0]} in location {item[1],item[2]}')
+
+
+
+
+     
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+    
+    
+   
