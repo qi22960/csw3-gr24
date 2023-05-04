@@ -140,6 +140,7 @@ def main1():
     
     #find possible value
     possible_values_for_grid = create_possible_values_grid(grid_need_to_slove)
+    print("All possible value")
     print(possible_values_for_grid)
     
     #find solution
