@@ -380,7 +380,6 @@ def main():
             average_time = sum(solve_times) / len(solve_times)
         print("Solved in: %.15f seconds" % average_time)
         print(solution)
-        safe_file("%d" % (i + 1), solution)  # task 2
         all_hints.append(['+++++++'])
         print('----------------')
         if check_solution(solution, n_rows, n_cols):
