@@ -212,7 +212,7 @@ def solve(grid, n_rows, n_cols):
     return recursive_solve(grid, n_rows, n_cols)
 
 
-def solve_time_recursive(grid, n_rows, n_cols):
+def average_solve_time(grid, n_rows, n_cols, solver_function):
     """
     This function measure time it takes for a grid to be solved using recursive solver and calculate the average 10 tries
     args: grid
@@ -222,24 +222,7 @@ def solve_time_recursive(grid, n_rows, n_cols):
     grid_copy = copy.deepcopy(grid)
     for a in range(10):
         start_time = time.time()
-        recursive_solve(grid_copy, n_rows, n_cols)
-        finish_time = time.time()
-        solve_times.append(finish_time - start_time)
-        average_time = sum(solve_times) / len(solve_times)
-    return round(average_time, 10)
-
-
-def solve_time_wavefront(grid, n_rows, n_cols):
-    """
-    This function measure time it takes for a grid to be solved using wavefront solver and calculate the average 10 tries
-    args: grid
-    return: average time in second
-    """
-    solve_times = []
-    grid_copy = copy.deepcopy(grid)
-    for a in range(10):
-        start_time = time.time()
-        wavefront_solve(grid_copy, n_rows, n_cols)
+        solver_function(grid_copy, n_rows, n_cols)
         finish_time = time.time()
         solve_times.append(finish_time - start_time)
         average_time = sum(solve_times) / len(solve_times)
@@ -301,18 +284,18 @@ def profile():
         if n_rows == 2 and n_cols == 2:
             grid_2_2_size.append((n_rows, n_cols))
             grid_2_2_empty.append(count_empty(grid))
-            recursive_grid_2_2_time.append(solve_time_recursive(grid, n_rows, n_cols))
-            wavefront_grid_2_2_time.append(solve_time_wavefront(grid, n_rows, n_cols))
+            recursive_grid_2_2_time.append(average_solve_time(grid, n_rows, n_cols, recursive_solve))
+            wavefront_grid_2_2_time.append(average_solve_time(grid, n_rows, n_cols, wavefront_solve))
         elif n_rows == 2 and n_cols == 3:
             grid_2_3_size.append((n_rows, n_cols))
             grid_2_3_empty.append(count_empty(grid))
-            recursive_grid_2_3_time.append(solve_time_recursive(grid, n_rows, n_cols))
-            wavefront_grid_2_3_time.append(solve_time_wavefront(grid, n_rows, n_cols))
+            recursive_grid_2_3_time.append(average_solve_time(grid, n_rows, n_cols, recursive_solve))
+            wavefront_grid_2_3_time.append(average_solve_time(grid, n_rows, n_cols, wavefront_solve))
         elif n_rows == 3 and n_cols == 3:
             grid_3_3_size.append((n_rows, n_cols))
             grid_3_3_empty.append(count_empty(grid))
-            recursive_grid_3_3_time.append(solve_time_recursive(grid, n_rows, n_cols))
-            wavefront_grid_3_3_time.append(solve_time_wavefront(grid, n_rows, n_cols))
+            recursive_grid_3_3_time.append(average_solve_time(grid, n_rows, n_cols, recursive_solve))
+            wavefront_grid_3_3_time.append(average_solve_time(grid, n_rows, n_cols, wavefront_solve))
 
     # Creating figure and axis objects
     fig, ax = plt.subplots()
