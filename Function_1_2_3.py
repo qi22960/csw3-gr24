@@ -125,17 +125,15 @@ def show_hints(main_list,hint_number):
             print(all_grid_empty[each_list])
         
                 
-def store_all_hints():
+def store_all_hints(name):
     '''
     This fintion is used to to store the solution in text seperately
     '''
     #find solution for each gieds in the list we have processed
     for each_grids in range(len(all_list_sep)):
         
-        file_name = f"Solution in text {each_grids+1}.txt" 
-        
         #store the selution in text
-        with open(file_name, 'w') as file:
+        with open(name, 'a+') as file:
             
             file.write(f'grid number: {each_grids+1}\n')
             hits_number_for_print = 1
