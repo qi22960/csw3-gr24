@@ -7,6 +7,8 @@ from Function_1_2_3 import read_file
 from Function_1_2_3 import safe_file
 from Function_1_2_3 import store_all_hints
 from Function_1_2_3 import print_all_hints
+from Task_3 import using_Wavefront
+import copy
 
 # 2x2 grids
 grid1 = read_file('2x2_2.txt')
@@ -33,6 +35,7 @@ grids = [
     (grid10, 3, 3), (grid11, 3, 3), (grid12, 3, 3), (grid13, 3, 3), (grid14, 3, 3), (grid15, 3, 3)
     ]
 
+grids_for_Wavefront_slove = copy.deepcopy(grids)
 
 def check_section(section, n):
     if len(set(section)) == len(section) and sum(section) == sum([i for i in range(n + 1)]):
@@ -351,6 +354,18 @@ def profile():
     plt.title("3x3 solution time")
     plt.show()
 
+def Wavefront_slove(grids):
+    
+    #print(grids_for_Wavefront_slove)
+    #print(len(grids_for_Wavefront_slove))
+    for grid_number in range(len(grids_for_Wavefront_slove)):
+        print('=======================================')
+        print('Wavefront_slove solution for grid',grid_number+1,':\n')
+        grid_need_to_slove = grids_for_Wavefront_slove[grid_number][0]
+        range_sudoku_ = grids_for_Wavefront_slove[grid_number][1]
+        Length_empty_grid_ = grids_for_Wavefront_slove[grid_number][2]
+        using_Wavefront(range_sudoku_,Length_empty_grid_,grid_need_to_slove)
+    
 
 def main():
     points = 0
@@ -381,7 +396,9 @@ def main():
 
     print("====================================")
     print("Test script complete, Total points: %d" % points)
-
+    
+    #using Wavefront to slove all grids
+    Wavefront_slove(grids_for_Wavefront_slove)
     # using flags
     user_typing = 0
     while user_typing != 'quit':
