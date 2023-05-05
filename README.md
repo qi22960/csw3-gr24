@@ -2,7 +2,7 @@
 
 Please run main.py
 
-Using flags after main.py the code will show the solution first and show the cont
+Using flags after main.py the code will show the solution first and show the contents of flags
    "-explain" to Show all the steps of the solving process in text
    "-hint number" to Show some specific number of hints
    "-profile" to Show the plot of solving time
