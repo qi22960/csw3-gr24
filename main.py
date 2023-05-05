@@ -443,9 +443,9 @@ def main():
         if args.explain == True:
             hints(0)
             store_all_hints(output_file_name)
-
-  #  # Print graphs
-  #  profile()
+		
+    print("\nUsing flags after main.py the code will show the solution first and show the contents of flags\n  '-h' to get help\n  '-explain' to Show all the steps of the solving process in text\n  '-hint number' to Show some specific number of hints\n  '-profile' to Show the plot of solving time\n  '-file'to read the file of sudoku  and save the solution in another file,Example if you want read hard1 and safe it's,please use -file hard1.txt solution_for_hard1.txt")
+      
 
 
 if __name__ == "__main__":
