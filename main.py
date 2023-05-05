@@ -443,9 +443,10 @@ def main():
         if args.explain == True:
             hints(0)
             store_all_hints(output_file_name)
-		
-    print('Instruction: Type in terminal: \n python3 main.py -explain      to show all the steps of the solving the grids \n python3 main.py -hint number      to show some specific number of hints  \n python3 main.py -profile      to show the plot of solving time \n python3 main.py -file file_name.txt  solution_file_name.txt      to read the file of sudoku and save the solution in another file')
 
+    print('\n ====================================\n')
+    print('Instruction: Type in terminal: \n python3 main.py -explain      to show all the steps of the solving the grids \n python3 main.py -hint number      to show some specific number of hints  \n python3 main.py -profile      to show the plot of solving time \n python3 main.py -file file_name.txt  solution_file_name.txt      to read the file of sudoku and save the solution in another file')
+    print('\n ====================================')
 
 if __name__ == "__main__":
     main()
