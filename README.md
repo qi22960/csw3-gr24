@@ -2,11 +2,12 @@
 
 Please run main.py
 
-Follow the instruction you can use:
-   'All hints' to show all hints
-   'plot' to show the solving time in graph
-   'store solution' to store the solution in text seperately
-   'hints(number)' to show hints of the amount you need and the original grid with hints. Example: type 'hints(3)' to show 3 hints. 
+Using flags after main.py the code will show the solution first and show the cont
+   "-explain" to Show all the steps of the solving process in text
+   "-hint number" to Show some specific number of hints
+   "-profile" to Show the plot of solving time
+   '-file'to read the file of sudoku  and save the solution in another file,Example if you want read hard1 and safe it in solution for hard1 ,please use --file hard1.txt solution_for_hard1.txt
+
   
   
 If you wamt to task using wavefront slover for single grid.
