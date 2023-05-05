@@ -384,21 +384,20 @@ def main():
     Wavefront_slove(grids_for_Wavefront_slove)
     # using flags
     parser = argparse.ArgumentParser(description="Solve Sudoku")
-    parser.add_argument("-explain", action="store_true", help="Show all the steps of the solving process")
-    parser.add_argument("-hint", nargs="?", const=True, type=int, help="Show some specific hints by number")
-    parser.add_argument("-profile", action="store_true", help="Show the plot of time")
-    parser.add_argument('-file', nargs=2, help='input and output file paths,Example if you want read hard1 and safe it in solution for hard1 ,please use --file hard1.txt solution_for_hard1.txt')
+    parser.add_argument("-explain", action="store_true", help="Show all the steps of the solving process in text")
+    parser.add_argument("-hint", nargs="?", const=True, type=int, help="Show some specific number of hints")
+    parser.add_argument("-profile", action="store_true", help="Show the plot of solving time")
+    parser.add_argument('-file', nargs=2, help='read the file of sudoku  and save the solution in another file,Example if you want read hard1 and safe it in solution for hard1 ,please use --file hard1.txt solution_for_hard1.txt')
 
     args = parser.parse_args()
 
-
+    # Task 2.1
     if args.explain == True:
         print('Show all hints1')
         hints(0)  # task 3
         print_all_hints() # as files #task 1
-    else:
-        print('Dont Show all hints')
 
+    #Task 2.2
     if args.hint is not None:
         if args.hint is True:
             number = True
@@ -408,15 +407,14 @@ def main():
         else:
             number = args.hint
             hints(number)
-            print(number)
-
+            
+    #Task 2.3
     if args.profile == True:
         print('show graphs')
         profile()
 
-    else:
-        print('Dont show graphs')
-
+    
+    #Task 2.4
     if args.file:
         input_file_name, output_file_name = args.file
         print("Input file nmae:", input_file_name)
@@ -446,8 +444,8 @@ def main():
             hints(0)
             store_all_hints(output_file_name)
 
-    # Print graphs
-    profile()
+  #  # Print graphs
+  #  profile()
 
 
 if __name__ == "__main__":
